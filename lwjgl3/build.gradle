@@ -165,10 +165,13 @@ distributions {
   main {
     contents {
       into('libs') {
+        def jarTask = project.tasks.named('jar').get()
+        def jarFileName = jarTask.archiveFile.get().asFile.name
+
         project.configurations.runtimeClasspath.files.findAll { file ->
-          file.getName() != project.tasks.jar.outputs.files.singleFile.name
+          file.name != jarFileName
         }.each { file ->
-          exclude file.name
+          exclude "**/${file.name}"
         }
       }
     }
